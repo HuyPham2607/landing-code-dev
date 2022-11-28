@@ -30,7 +30,7 @@ export const loginredux = async (dispatch, user) => {
   try {
     const Login = async () => {
       const login = publicRequest
-        .post("/login", user)
+        .post(`/log-in?username=${user.username}&password=${user.password}`)
         .then((res) => {
           if (res.data === true) {
             dispatch(loginSucees(res.data));
@@ -41,6 +41,29 @@ export const loginredux = async (dispatch, user) => {
         .catch((err) => false);
     };
     Login();
+  } catch (error) {
+    dispatch(loginFailure());
+  }
+};
+
+export const PostReport = async (dispatch, FormReport) => {
+  dispatch(loginStart());
+  try {
+    const Report = async () => {
+      const login = publicRequest
+        .post(
+          `/report/?ori_image_s3_key=${FormReport.ori_image_s3_key}&s3key_detected_img=${FormReport.s3key_detected_img}&message=${FormReport.message}&item_reported=${FormReport.item_reported}`
+        )
+        .then((res) => {
+          if (res.data === true) {
+            dispatch(loginSucees(res.data));
+          } else {
+            dispatch(loginFailure());
+          }
+        })
+        .catch((err) => false);
+    };
+    Report();
   } catch (error) {
     dispatch(loginFailure());
   }

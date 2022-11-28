@@ -15,8 +15,8 @@ function ListReport() {
     return (
       <>
         {currentItems &&
-          currentItems.map((item) => (
-            <div className="main-results py-4">
+          currentItems.map((item, i) => (
+            <div className="main-results py-4" key={i}>
               <div className="item">
                 <div className="content">
                   <div>

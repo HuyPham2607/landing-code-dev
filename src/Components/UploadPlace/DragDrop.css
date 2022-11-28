@@ -157,3 +157,43 @@
   width: 77%;
   margin-left: 15px;
 }
+
+/* form-report */
+.form-report {
+  display: none;
+}
+
+.form-report.open {
+  display: block;
+}
+
+/* alert messgae */
+
+.alert-message-success {
+  padding: 20px;
+  background-color: #04aa6d;
+  color: white;
+  display: none;
+}
+
+.alert-message-failed {
+  padding: 20px;
+  background-color: red;
+  color: white;
+  display: none;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
