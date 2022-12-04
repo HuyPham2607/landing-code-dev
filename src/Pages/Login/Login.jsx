@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Login.css";
 import { loginredux } from "../../redux/apicall";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import NavbarAdmin from "../../Components/Navbaradmin/Navbaradmin";
 function Login() {
   const dispatch = useDispatch();
@@ -10,8 +10,7 @@ function Login() {
     username: "",
     password: "",
   });
-  const user = useSelector((state) => state.user);
-  console.log(user);
+  // const user = useSelector((state) => state.user);
   // const [{ username, password }] = loginForm;
   const onChangeLoginForm = (event) =>
     setLoginForm({ ...loginForm, [event.target.name]: event.target.value });

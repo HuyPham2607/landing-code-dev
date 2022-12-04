@@ -13,6 +13,8 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import UserRedux from "./UserRedux";
+import ReportRedux from "./ReportRedux";
+import DetailReport from "./DetailReport";
 
 const persistConfig = {
   key: "root",
@@ -23,6 +25,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   products: ProductReducer,
   user: UserRedux,
+  report: ReportRedux,
+  detailReport: DetailReport,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
