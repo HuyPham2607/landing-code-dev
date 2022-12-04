@@ -3,9 +3,20 @@ import "./DragDrop.css";
 import UploadIcon from "./Icon (Stroke).png";
 import { publicRequest } from "../../requestmethod";
 import BottleOpenerTest from "./standard_images/bottle_opener.jpg";
-
+import { getProducts } from "../../redux/apicall";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { ProductsSlice } from "../../redux/ProductRedux";
+import { useNavigate } from "react-router-dom";
 // drag drop file component
 function DragDropFile() {
+  let navigate = useNavigate();
+  const ChangeRouteDetail = (_id) => {
+    let path = `/${_id}`;
+    navigate(path);
+  };
+  const dispatch = useDispatch();
+  const catergory = useSelector((product) => product.products.products);
   const [Img, setImg] = useState(false);
   const [Labels, setLabels] = useState([]);
   const [result, setRusult] = useState([]);
@@ -36,7 +47,18 @@ function DragDropFile() {
       [e.target.name]: TextReport,
       ori_image_s3_key: Filename,
       s3key_detected_img: result.s3key_detected_img,
-      item_reported: Item[id].ItemName,
+      item_reported:
+        Item[id].ItemName === "Bread Knife"
+          ? "bread_knife"
+          : "false" && Item[id].ItemName === "Masher"
+          ? "masher"
+          : "false" && Item[id].ItemName === "Bottle Opener"
+          ? "bottle_opener"
+          : "false" && Item[id].ItemName === "Tongs"
+          ? "tongs"
+          : "false" && Item[id].ItemName === "Spatula"
+          ? "spatula"
+          : "false",
     });
   };
 
@@ -82,6 +104,7 @@ function DragDropFile() {
     })
       .then((response) => response.json())
       .then((result) => {
+        getProducts(dispatch);
         console.log(result);
         console.log("Success:", result);
         setIsLoading(false);
@@ -115,6 +138,10 @@ function DragDropFile() {
             setTimeout(() => {
               alert.style.display = "none";
             }, 4000);
+            const btnReport = document.getElementById("btn-report");
+            btnReport.style.display = "none";
+            const inputReport = document.getElementById(`form-report-${id}`);
+            inputReport.style.display = "none";
           }
           const TextReport = document.getElementById(`form-text-${id}`);
           TextReport.value = "";
@@ -131,6 +158,22 @@ function DragDropFile() {
     };
     Report();
   };
+
+  console.log(catergory);
+
+  const ShowInformationRelated = catergory
+    .filter((e) => e.ID !== Item[0]?.ID)
+    .map((e, i) => {
+      return (
+        <div
+          key={i}
+          className="item-image"
+          onClick={() => ChangeRouteDetail(e.Alias)}
+        >
+          <img className="image-related" src={e.MainImages} alt="" />
+        </div>
+      );
+    });
 
   const ShowResult = Item.map((e, id) => {
     return (
@@ -164,7 +207,11 @@ function DragDropFile() {
                 <h4 style={{ marginTop: "10px", marginLeft: "15px" }}>
                   {e.ItemName}
                 </h4>
-                <button onClick={() => HandleReport(id)} className="btn-report">
+                <button
+                  onClick={() => HandleReport(id)}
+                  id="btn-report"
+                  className="btn-report"
+                >
                   Report
                 </button>
               </div>
@@ -204,7 +251,7 @@ function DragDropFile() {
             />
           </div>
           <button
-            id={"button-report-" + `${id}`}
+            id={`button-report-` + `${id}`}
             type="submit"
             onClick={() => HandleSubmitFormReport(id)}
           >
@@ -270,6 +317,18 @@ function DragDropFile() {
         </h1>
         <div className="white-border"></div>
         {ShowResult}
+        <div className="my-4">
+          <h1
+            style={{
+              display: "inline-block",
+              padding: "20px 0",
+              color: "white",
+            }}
+          >
+            Information Related
+          </h1>
+          <div className="information-related">{ShowInformationRelated}</div>
+        </div>
       </div>
     </>
   );

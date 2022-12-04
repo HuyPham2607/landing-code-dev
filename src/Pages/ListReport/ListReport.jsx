@@ -5,26 +5,41 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import "./ListReport.css";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { GetReport } from "../../redux/apicall";
+import { useSelector } from "react-redux";
 function ListReport() {
-  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  const dispatch = useDispatch();
+  useEffect(() => {
+    GetReport(dispatch);
+  }, []);
+  const report = useSelector((item) => item.report.report);
+  let navigate = useNavigate();
+  const ChangeRouteDetailReport = (SK) => {
+    let path = `/item/${SK}`;
+    navigate(path);
+  };
+
   function Items({ currentItems }) {
     return (
       <>
         {currentItems &&
           currentItems.map((item, i) => (
-            <div className="main-results py-4" key={i}>
+            <div
+              className="main-results py-4"
+              key={i}
+              onClick={() => ChangeRouteDetailReport(item.SK)}
+            >
               <div className="item">
                 <div className="content">
                   <div>
-                    <img
-                      className="image-item"
-                      src="https://s3-alpha-sig.figma.com/img/633f/b256/4be04c2552467a911974c1bc163bf3ba?Expires=1670198400&Signature=hfkwCO5unJI3r4rBnIxHhYmSlz~QJlEUR1kV5E32WUWyP6qwNiiDxsB0F1LQOzqPFj9Jjvi-nU2SDmb8D~5t1-injn6yEKMLymGBnDtThXvWMUbOMmb4v1AlbZRRXKXtjFfmduFXhPIyaFL6tCPeG4v-505VoFsp8KVDRn7aNp6zi6GFY9Ks6LjMZ8HmosRXIWR3exrlImKZGyLvz7zfk95ffr5gvtf7hMxsMuVB6eecPOxB1MhGlhtewc2QYS5whwkdw6oGD4wQr5LlPeKc6UZdlaXHmt2tUWcvplk-Dm~X0b4AhPk2WR17981ppbDZdayw0I9sFBdbLtHdWz7F5w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-                      alt=""
-                    />
+                    <img className="image-item" src={item.OriImageSrc} alt="" />
                   </div>
                   <div className="text-item px-3">
                     <div className="calendar-item">
@@ -33,14 +48,14 @@ function ListReport() {
                           <span className="icon-day">
                             <FontAwesomeIcon icon={faCalendarDay} />
                           </span>
-                          <p>23 Sep 2022</p>
+                          <p>{item.CreatedAt?.slice(0, 10)}</p>
                         </div>
                         <div className="vertical-line"></div>
                         <div className="time-item d-flex">
                           <span className="icon-time">
                             <FontAwesomeIcon icon={faClock} />
                           </span>
-                          <p>17h30</p>
+                          <p>{item.CreatedAt?.slice(11, 16)}</p>
                         </div>
                       </div>
                       <div className="underline"></div>
@@ -49,8 +64,11 @@ function ListReport() {
                       <div>
                         <p>Object delected:</p>
                       </div>
-                      <li>Jar</li>
-                      <li>Knife</li>
+                      {item.ItemsReported.map((e, i) => (
+                        <div key={i}>
+                          <li>{e}</li>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -64,11 +82,11 @@ function ListReport() {
   function PaginatedItems() {
     const [itemOffset, setItemOffset] = useState(0);
     const endOffset = itemOffset + 4;
-    const currentItems = items.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(items.length / 4);
+    const currentItems = report.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(report.length / 4);
 
     const handlePageClick = (event) => {
-      const newOffset = (event.selected * 4) % items.length;
+      const newOffset = (event.selected * 4) % report.length;
       setItemOffset(newOffset);
     };
 
