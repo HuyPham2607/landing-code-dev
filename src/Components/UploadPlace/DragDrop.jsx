@@ -98,7 +98,8 @@ function DragDropFile() {
     const formData = new FormData();
     formData.append("file", files[0]);
     setFilename(files[0].name);
-    fetch("http://apidev.phantomal.site/dev/upload-img", {
+
+    fetch("https://apidev.phantomal.site/dev/upload-img", {
       method: "POST",
       body: formData,
     })
