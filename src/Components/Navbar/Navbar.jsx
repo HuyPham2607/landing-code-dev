@@ -20,9 +20,6 @@ class Navbar extends Component {
           <div className="navbar-element navbar-link">
             <Link to="/category">Category</Link>
           </div>
-          <div className="navbar-element navbar-link">
-            <Link to="/categorys">Number 1</Link>
-          </div>
         </div>
       </div>
     );

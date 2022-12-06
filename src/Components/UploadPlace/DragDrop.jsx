@@ -22,7 +22,7 @@ function DragDropFile() {
   const [result, setRusult] = useState([]);
   const [Item, setItem] = useState([]);
   const [Dis, setDis] = useState(false);
-
+  console.log(catergory);
   const [Filename, setFilename] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   // drag state
@@ -159,8 +159,6 @@ function DragDropFile() {
     Report();
   };
 
-  console.log(catergory);
-
   const ShowInformationRelated = catergory
     .filter((e) => e.ID !== Item[0]?.ID)
     .map((e, i) => {
@@ -174,8 +172,14 @@ function DragDropFile() {
         </div>
       );
     });
+  const HandleChangeResultIMG = () => {
+    const id = catergory.filter((e) => e.ID === Item[0].ID);
+    let path = `/${id[0]?.Alias}`;
+    navigate(path);
+  };
 
   const ShowResult = Item.map((e, id) => {
+    console.log(catergory);
     return (
       <div key={id}>
         <div
@@ -195,7 +199,7 @@ function DragDropFile() {
         </div>
         <div className="result-box">
           <div className="result-details">
-            <div className="left-image">
+            <div className="left-image" onClick={HandleChangeResultIMG}>
               <img
                 src={e.MainImage}
                 alt="bottleOpener"
@@ -250,13 +254,16 @@ function DragDropFile() {
               name="message"
             />
           </div>
-          <button
-            id={`button-report-` + `${id}`}
-            type="submit"
-            onClick={() => HandleSubmitFormReport(id)}
-          >
-            submit
-          </button>
+          <div className="btn-result-report">
+            <button
+              className="btn-report-drapdrop"
+              id={`button-report-` + `${id}`}
+              type="submit"
+              onClick={() => HandleSubmitFormReport(id)}
+            >
+              submit
+            </button>
+          </div>
         </div>
       </div>
     );
