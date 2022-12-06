@@ -89,6 +89,29 @@
   padding: 10px;
 }
 
+.btn-result-report {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-report-drapdrop {
+  border-radius: 2px;
+  border-color: #fff;
+  width: 100px;
+  height: 30px;
+  background-color: #848482;
+  color: #fff;
+}
+
+.btn-report-drapdrop:disabled {
+  opacity: 0.3;
+}
+
+.btn-report-drapdrop:hover {
+  color: #000;
+}
+
 .result-details {
   border-radius: 10px;
   display: flex;
