@@ -22,7 +22,7 @@ function DragDropFile() {
   const [result, setRusult] = useState([]);
   const [Item, setItem] = useState([]);
   const [Dis, setDis] = useState(false);
-  console.log(catergory);
+
   const [Filename, setFilename] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   // drag state
@@ -98,11 +98,13 @@ function DragDropFile() {
     const formData = new FormData();
     formData.append("file", files[0]);
     setFilename(files[0].name);
-
-    fetch("https://apidev.phantomal.site/dev/upload-img", {
-      method: "POST",
-      body: formData,
-    })
+    fetch(
+      "http://thesisloadbalancer-482548701.ap-southeast-2.elb.amazonaws.com/upload-img",
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
       .then((response) => response.json())
       .then((result) => {
         getProducts(dispatch);
@@ -173,6 +175,7 @@ function DragDropFile() {
         </div>
       );
     });
+
   const HandleChangeResultIMG = () => {
     const id = catergory.filter((e) => e.ID === Item[0].ID);
     let path = `/${id[0]?.Alias}`;
@@ -180,7 +183,6 @@ function DragDropFile() {
   };
 
   const ShowResult = Item.map((e, id) => {
-    console.log(catergory);
     return (
       <div key={id}>
         <div
@@ -255,16 +257,14 @@ function DragDropFile() {
               name="message"
             />
           </div>
-          <div className="btn-result-report">
-            <button
-              className="btn-report-drapdrop"
-              id={`button-report-` + `${id}`}
-              type="submit"
-              onClick={() => HandleSubmitFormReport(id)}
-            >
-              submit
-            </button>
-          </div>
+          <button
+            id={`button-report-` + `${id}`}
+            type="submit"
+            className="btn-submit-report"
+            onClick={() => HandleSubmitFormReport(id)}
+          >
+            submit
+          </button>
         </div>
       </div>
     );
@@ -308,13 +308,18 @@ function DragDropFile() {
   ) : (
     <>
       <div className="result-img-div">
-        <img src={Img} alt="resultImg" className="result-img" />
+        <div className="result-img-content">
+          <div className="img-wrap">
+            <img src={Img} alt="resultImg" className="result-img" />
+          </div>
+        </div>
         <p>
-          <b>Uploaded</b> <u>{Filename}</u>
+          <b>Uploaded:</b> <u>{Filename}</u>
         </p>
       </div>
       <div className="result-text-div">
         <h1
+          className="mb-0"
           style={{
             display: "inline-block",
             width: "20%",
